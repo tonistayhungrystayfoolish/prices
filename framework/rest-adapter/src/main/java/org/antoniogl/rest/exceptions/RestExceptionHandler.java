@@ -1,6 +1,5 @@
-package org.antoniogl.exceptionHandler;
+package org.antoniogl.rest.exceptions;
 
-import org.antoniogl.rest.exceptions.PriceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

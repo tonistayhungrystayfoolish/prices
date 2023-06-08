@@ -1,4 +1,4 @@
-package org.antoniogl.exceptionHandler;
+package org.antoniogl.rest.exceptions;
 
 import org.springframework.http.HttpStatus;
 
