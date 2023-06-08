@@ -9,7 +9,6 @@ import io.tej.SwaggerCodgen.api.PricesApi;
 import io.tej.SwaggerCodgen.model.PricesResponseDto;
 import lombok.AllArgsConstructor;
 import org.antoniogl.entity.Prices;
-import org.antoniogl.rest.exceptions.PriceNotFoundException;
 import org.antoniogl.rest.mapper.PricesDtoMapper;
 import org.antoniogl.usecass.PricesManagementUseCase;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +36,6 @@ public class PricesManagementAdapter implements PricesApi {
         Optional<Prices> optionalPrices = pricesManagementUseCase.getPrices(filterDate, productId, brandId);
         return optionalPrices.map(pricesDtoMapper::toDto)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new PriceNotFoundException("Price not found"));
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 }
