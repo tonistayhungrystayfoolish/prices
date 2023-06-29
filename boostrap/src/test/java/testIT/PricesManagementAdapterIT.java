@@ -2,15 +2,19 @@ package testIT;
 
 import io.restassured.RestAssured;
 import org.antoniogl.App;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -47,6 +51,28 @@ class PricesManagementAdapterIT {
                 .body("priceList", equalTo(expectedPriceList))
                 .body("startDate", equalTo(expectedStartDate))
                 .body("endDate", equalTo(expectedEndDate))
+                .extract();
+    }
+
+    @Test
+    void shouldReturnNotFoundPrice() {
+        String url = String.format("/api/v1/prices?filterDate=%s&productId=%s&brandId=%s",
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME), PRODUCT_ID, BRAND_ID);
+        RestAssured.given().contentType(JSON)
+                .when().get(BASE_URI + port + url)
+                .then().log().body()
+                .statusCode(NOT_FOUND.value())
+                .extract();
+    }
+
+    @Test
+    void emptyProductIdShouldReturnBadRequest() {
+        String url = String.format("/api/v1/prices?filterDate=%s&brandId=%s",
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME), BRAND_ID);
+        RestAssured.given().contentType(JSON)
+                .when().get(BASE_URI + port + url)
+                .then().log().body()
+                .statusCode(BAD_REQUEST.value())
                 .extract();
     }
 }

@@ -1,7 +1,7 @@
 package org.antoniogl.rest.mapper;
 
-import io.tej.SwaggerCodgen.model.PricesResponseDto;
 import org.antoniogl.entity.Prices;
+import org.antoniogl.rest.dto.Response.PricesResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
